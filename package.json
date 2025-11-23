@@ -1,6 +1,6 @@
 {
   "name": "connectwise-manage-sdk-v3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript SDK for ConnectWise Manage API",
   "type": "module",
   "main": "./dist/index.js",
