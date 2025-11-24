@@ -354,6 +354,19 @@ export class SystemNamespace {
     return this._documents;
   }
 
+
+  private _systemInfos?: Resources.SystemInfosResource;
+
+  /**
+   * Access systemInfos operations
+   */
+  get systemInfos(): Resources.SystemInfosResource {
+    if (!this._systemInfos) {
+      this._systemInfos = new Resources.SystemInfosResource(this.http);
+    }
+    return this._systemInfos;
+  }
+
 }
 
 

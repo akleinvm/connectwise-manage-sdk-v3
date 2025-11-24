@@ -170,5 +170,9 @@
   "purchaseOrderLineItem": {
     "path": "/procurement/purchaseOrders/{purchaseOrderId}/lineItems/{lineItemId}",
     "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "systemInfo": {
+    "path": "/system/info",
+    "operations": ["getOne"]
   }
 }

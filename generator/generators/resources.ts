@@ -99,6 +99,10 @@ const generateMethods = (
     methods.push(generateGetMethod(typeName));
   }
 
+  if (operations.includes('getOne')) {
+    methods.push(generateGetOneMethod(typeName));
+  }
+
   if (operations.includes('create')) {
     methods.push(generateCreateMethod(typeName));
   }
@@ -163,6 +167,18 @@ const generateGetMethod = (typeName: string): string => `
    */
   async get(id: number, params?: Pick<QueryParams, 'fields'>): Promise<${typeName}> {
     return this.http.get<${typeName}>(\`\${this.basePath}/\${id}\`, params);
+  }
+`;
+
+const generateGetOneMethod = (typeName: string): string => `
+  /**
+   * Get the resource
+   * @param params - Optional query parameters for field selection
+   * @param params.fields - Limits which information is returned in the response. Example: \`id,name,status/id\`.
+   * @returns The resource
+   */
+  async get(params?: Pick<QueryParams, 'fields'>): Promise<${typeName}> {
+    return this.http.get<${typeName}>(this.basePath, params);
   }
 `;
 

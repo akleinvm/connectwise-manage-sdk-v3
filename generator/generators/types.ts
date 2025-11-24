@@ -16,12 +16,18 @@ export const generateTypes = (samples: SampleData[]): string => {
   return header + interfaces;
 };
 
-const isValidSample = (sample: unknown): boolean =>
-  Array.isArray(sample) && sample.length > 0 && typeof sample[0] === 'object';
+const isValidSample = (sample: unknown): boolean => {
+  if (Array.isArray(sample)) {
+    return sample.length > 0 && typeof sample[0] === 'object';
+  }
+  return sample !== null && typeof sample === 'object';
+};
 
 const extractPropertiesFromSample = (sample: unknown): PropertyInfo[] => {
-  const arr = sample as unknown[];
-  return extractProperties(arr[0] as Record<string, unknown>);
+  if (Array.isArray(sample)) {
+    return extractProperties(sample[0] as Record<string, unknown>);
+  }
+  return extractProperties(sample as Record<string, unknown>);
 };
 
 const generateInterface = (name: string, properties: PropertyInfo[]): string => {

@@ -4462,3 +4462,26 @@ export class PurchaseOrderLineItemsResource {
   }
 }
 
+
+/**
+ * Resource for managing systeminfos
+ */
+export class SystemInfosResource {
+  private readonly http: HttpClient;
+  private readonly basePath = '/system';
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
+  /**
+   * Get the resource
+   * @param params - Optional query parameters for field selection
+   * @param params.fields - Limits which information is returned in the response. Example: `id,name,status/id`.
+   * @returns The resource
+   */
+  async get(params?: Pick<QueryParams, 'fields'>): Promise<Types.SystemInfo> {
+    return this.http.get<Types.SystemInfo>(this.basePath, params);
+  }
+}
+

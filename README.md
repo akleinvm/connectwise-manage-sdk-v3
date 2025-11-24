@@ -75,7 +75,7 @@ The SDK organizes resources into namespaces matching the ConnectWise API structu
 - **`client.procurement`** - Catalog items, products, purchase orders
 - **`client.sales`** - Sales orders
 - **`client.schedule`** - Schedule entries
-- **`client.system`** - Members, departments, locations, documents
+- **`client.system`** - Members, departments, locations, documents, system info
 - **`client.marketing`** - Groups
 
 ## CRUD Operations
@@ -141,6 +141,18 @@ await client.company.companies.delete(123);
 const count = await client.service.tickets.count({
   conditions: "status/name='Open'"
 });
+```
+
+### Singleton resources
+
+Some endpoints return a single object without an ID parameter:
+
+```typescript
+// Get system info (no ID needed)
+const info = await client.system.info.get();
+console.log(info.version);    // "v2025.1.10431"
+console.log(info.isCloud);    // false
+console.log(info.cloudRegion); // "NA"
 ```
 
 ## Nested Resources
@@ -294,10 +306,25 @@ npm run build
 2. **Add the endpoint mapping** to `generator/objects.json`:
    ```json
    {
-     "ticket": "/service/tickets/{ticketId}",
-     "newEntity": "/path/to/entities/{entityId}"
+     "ticket": {
+       "path": "/service/tickets/{ticketId}",
+       "operations": ["list", "get", "create", "update", "delete", "count"]
+     },
+     "newEntity": {
+       "path": "/path/to/entities/{entityId}",
+       "operations": ["list", "get", "create", "update", "delete", "count"]
+     }
    }
    ```
+
+   **Available operations:**
+   - `list` - List items with pagination (`list()`, `listAll()`)
+   - `get` - Get single item by ID (`get(id)`)
+   - `getOne` - Get singleton resource without ID (`get()`)
+   - `create` - Create new item (`create(data)`)
+   - `update` - Update via PATCH operations (`update(id, operations)`)
+   - `delete` - Delete by ID (`delete(id)`)
+   - `count` - Count matching items (`count(params)`)
 
 3. **Run the generator**:
    ```bash
@@ -307,7 +334,7 @@ npm run build
 
 ### Sample Format
 
-Samples should be JSON arrays containing at least one object:
+For most endpoints, samples should be JSON arrays containing at least one object:
 
 ```json
 [
@@ -320,6 +347,16 @@ Samples should be JSON arrays containing at least one object:
     }
   }
 ]
+```
+
+For singleton endpoints (using `getOne` operation), samples should be a single object:
+
+```json
+{
+  "version": "v2025.1.10431",
+  "isCloud": false,
+  "serverTimeZone": "Pacific Standard Time"
+}
 ```
 
 The generator will:

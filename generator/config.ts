@@ -8,7 +8,7 @@ export const config = {
   outputPath: path.resolve(GENERATOR_PATH, '..', 'src'),
 } as const;
 
-export type Operation = 'list' | 'get' | 'create' | 'update' | 'delete' | 'count';
+export type Operation = 'list' | 'get' | 'getOne' | 'create' | 'update' | 'delete' | 'count';
 
 export interface EntityConfig {
   path: string;

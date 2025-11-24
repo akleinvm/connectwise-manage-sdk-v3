@@ -2026,3 +2026,15 @@ export interface PurchaseOrderLineItem {
     name?: string;
   };
 }
+
+export interface SystemInfo {
+  version?: string;
+  isCloud?: boolean;
+  serverTimeZone?: string;
+  licenseBits?: {
+    name?: string;
+    activeFlag?: boolean;
+  }[];
+  cloudRegion?: string;
+  maxWorkFlowRecordsAllowed?: number;
+}
