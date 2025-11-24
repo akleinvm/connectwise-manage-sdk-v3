@@ -14,7 +14,7 @@ npm install connectwise-manage-sdk-v3
 import { ConnectWiseClient } from 'connectwise-manage-sdk-v3';
 
 const client = new ConnectWiseClient({
-  baseUrl: 'https://your-instance.com/v4_6_release/apis/3.0',
+  baseUrl: 'https://your-instance.com',
   auth: {
     username: 'company+publicKey',
     password: 'privateKey'
@@ -38,6 +38,36 @@ const newTicket = await client.service.tickets.create({
   board: { id: 1 },
   company: { id: 123 }
 });
+```
+
+## Deferred Configuration
+
+You can create a client instance without configuration and configure it later. This is useful when credentials are loaded asynchronously or when you need to set up the client before configuration is available.
+
+```typescript
+import { ConnectWiseClient, ConfigurationError } from 'connectwise-manage-sdk-v3';
+
+// Create client without configuration
+const client = new ConnectWiseClient();
+
+// Configure later (e.g., after loading from environment)
+client.configure({
+  baseUrl: 'https://your-instance.com',
+  auth: {
+    username: process.env.CW_USERNAME!,
+    password: process.env.CW_PASSWORD!
+  },
+  clientId: process.env.CW_CLIENT_ID
+});
+
+// Check if configured
+if (client.isConfigured()) {
+  const tickets = await client.service.tickets.list();
+}
+
+// If you call an endpoint before configuring, a ConfigurationError is thrown
+const unconfigured = new ConnectWiseClient();
+await unconfigured.service.tickets.list(); // Throws ConfigurationError
 ```
 
 ## CORS Proxy Support
@@ -231,13 +261,16 @@ import {
   AuthenticationError,
   ForbiddenError,
   NotFoundError,
-  ValidationError
+  ValidationError,
+  ConfigurationError
 } from 'connectwise-manage-sdk-v3';
 
 try {
   const ticket = await client.service.tickets.get(99999);
 } catch (error) {
-  if (error instanceof NotFoundError) {
+  if (error instanceof ConfigurationError) {
+    console.log('Client not configured');
+  } else if (error instanceof NotFoundError) {
     console.log('Ticket not found');
   } else if (error instanceof AuthenticationError) {
     console.log('Invalid credentials');

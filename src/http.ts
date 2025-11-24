@@ -4,6 +4,7 @@ import {
   ForbiddenError,
   NotFoundError,
   ValidationError,
+  ConfigurationError,
 } from './errors.js';
 import type { QueryParams, PatchOperation } from './query/types.js';
 
@@ -48,12 +49,22 @@ export interface ClientConfig {
  * HTTP client for making requests to the ConnectWise API
  */
 export class HttpClient {
-  private readonly baseUrl: string;
-  private readonly authHeader: string;
-  private readonly clientId?: string;
-  private readonly corsProxyUrl?: string;
+  private baseUrl: string = '';
+  private authHeader: string = '';
+  private clientId?: string;
+  private corsProxyUrl?: string;
+  private configured: boolean = false;
 
-  constructor(config: ClientConfig) {
+  constructor(config?: ClientConfig) {
+    if (config) {
+      this.configure(config);
+    }
+  }
+
+  /**
+   * Configure the HTTP client with connection details
+   */
+  configure(config: ClientConfig): void {
     let baseUrl = config.baseUrl.trim();
 
     // Ensure URL has protocol
@@ -73,6 +84,20 @@ export class HttpClient {
     this.authHeader = 'Basic ' + btoa(`${config.auth.username}:${config.auth.password}`);
     this.clientId = config.clientId;
     this.corsProxyUrl = config.corsProxyUrl;
+    this.configured = true;
+  }
+
+  /**
+   * Check if the client is configured
+   */
+  isConfigured(): boolean {
+    return this.configured;
+  }
+
+  private ensureConfigured(): void {
+    if (!this.configured) {
+      throw new ConfigurationError();
+    }
   }
 
   private buildUrl(path: string, params?: QueryParams): string {
@@ -178,6 +203,7 @@ export class HttpClient {
    * Make a GET request
    */
   async get<T>(path: string, params?: QueryParams): Promise<T> {
+    this.ensureConfigured();
     const url = this.buildUrl(path, params);
     return this.request<T>('GET', url);
   }
@@ -186,6 +212,7 @@ export class HttpClient {
    * Make a POST request
    */
   async post<T>(path: string, body?: unknown): Promise<T> {
+    this.ensureConfigured();
     const url = this.buildUrl(path);
     return this.request<T>('POST', url, body);
   }
@@ -194,6 +221,7 @@ export class HttpClient {
    * Make a PATCH request
    */
   async patch<T>(path: string, operations: PatchOperation[]): Promise<T> {
+    this.ensureConfigured();
     const url = this.buildUrl(path);
     return this.request<T>('PATCH', url, operations);
   }
@@ -202,6 +230,7 @@ export class HttpClient {
    * Make a DELETE request
    */
   async delete(path: string): Promise<void> {
+    this.ensureConfigured();
     const url = this.buildUrl(path);
     await this.request<void>('DELETE', url);
   }

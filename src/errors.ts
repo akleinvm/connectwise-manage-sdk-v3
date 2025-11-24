@@ -54,3 +54,13 @@ export class ValidationError extends ConnectWiseError {
     this.name = 'ValidationError';
   }
 }
+
+/**
+ * Error thrown when client is not configured before making API requests
+ */
+export class ConfigurationError extends Error {
+  constructor(message: string = 'Client not configured. Call configure() before making API requests.') {
+    super(message);
+    this.name = 'ConfigurationError';
+  }
+}
