@@ -40,6 +40,28 @@ const newTicket = await client.service.tickets.create({
 });
 ```
 
+## CORS Proxy Support
+
+For browser-based applications, you can route requests through a CORS proxy:
+
+```typescript
+const client = new ConnectWiseClient({
+  baseUrl: 'https://your-instance.com/v4_6_release/apis/3.0',
+  auth: {
+    username: 'company+publicKey',
+    password: 'privateKey'
+  },
+  clientId: 'your-client-id',
+  corsProxyUrl: 'https://your-proxy.com/api/proxy'
+});
+```
+
+When `corsProxyUrl` is set, all requests are POSTed to the proxy with:
+- `method` - HTTP method (GET, POST, PATCH, DELETE)
+- `url` - Target API URL
+- `headers` - Authorization and clientId headers
+- `body` - Request body (for POST/PATCH)
+
 ## Available Namespaces
 
 The SDK organizes resources into namespaces matching the ConnectWise API structure:

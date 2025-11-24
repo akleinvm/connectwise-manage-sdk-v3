@@ -36,6 +36,12 @@ export interface ClientConfig {
    * Client ID for API access (required by ConnectWise)
    */
   clientId?: string;
+
+  /**
+   * Optional CORS proxy URL for browser-based usage
+   * When set, all requests will be sent to this proxy with the original request details in the body
+   */
+  corsProxyUrl?: string;
 }
 
 /**
@@ -45,11 +51,13 @@ export class HttpClient {
   private readonly baseUrl: string;
   private readonly authHeader: string;
   private readonly clientId?: string;
+  private readonly corsProxyUrl?: string;
 
   constructor(config: ClientConfig) {
     this.baseUrl = config.baseUrl.replace(/\/$/, '');
     this.authHeader = 'Basic ' + btoa(`${config.auth.username}:${config.auth.password}`);
     this.clientId = config.clientId;
+    this.corsProxyUrl = config.corsProxyUrl;
   }
 
   private buildUrl(path: string, params?: QueryParams): string {
@@ -79,6 +87,44 @@ export class HttpClient {
     }
 
     return headers;
+  }
+
+  private async request<T>(method: string, url: string, body?: unknown): Promise<T> {
+    let response: Response;
+
+    if (this.corsProxyUrl) {
+      // Use CORS proxy
+      const proxyHeaders: Record<string, string> = {
+        'Authorization': this.authHeader,
+        'Content-Type': 'application/json',
+      };
+
+      if (this.clientId) {
+        proxyHeaders['clientId'] = this.clientId;
+      }
+
+      response = await fetch(this.corsProxyUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          method: method,
+          url: url,
+          headers: proxyHeaders,
+          body: body,
+        }),
+      });
+    } else {
+      // Direct request
+      response = await fetch(url, {
+        method: method,
+        headers: this.getHeaders(),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+    }
+
+    return this.handleResponse<T>(response);
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -118,12 +164,7 @@ export class HttpClient {
    */
   async get<T>(path: string, params?: QueryParams): Promise<T> {
     const url = this.buildUrl(path, params);
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: this.getHeaders(),
-    });
-
-    return this.handleResponse<T>(response);
+    return this.request<T>('GET', url);
   }
 
   /**
@@ -131,13 +172,7 @@ export class HttpClient {
    */
   async post<T>(path: string, body?: unknown): Promise<T> {
     const url = this.buildUrl(path);
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: body ? JSON.stringify(body) : undefined,
-    });
-
-    return this.handleResponse<T>(response);
+    return this.request<T>('POST', url, body);
   }
 
   /**
@@ -145,13 +180,7 @@ export class HttpClient {
    */
   async patch<T>(path: string, operations: PatchOperation[]): Promise<T> {
     const url = this.buildUrl(path);
-    const response = await fetch(url, {
-      method: 'PATCH',
-      headers: this.getHeaders(),
-      body: JSON.stringify(operations),
-    });
-
-    return this.handleResponse<T>(response);
+    return this.request<T>('PATCH', url, operations);
   }
 
   /**
@@ -159,11 +188,6 @@ export class HttpClient {
    */
   async delete(path: string): Promise<void> {
     const url = this.buildUrl(path);
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: this.getHeaders(),
-    });
-
-    await this.handleResponse<void>(response);
+    await this.request<void>('DELETE', url);
   }
 }
