@@ -17,11 +17,16 @@ export const generateResources = (objects: ObjectsMap): string => {
   return `${header}${imports}\n\n${resources}`;
 };
 
+const isSingleton = (operations: Operation[]): boolean =>
+  operations.length === 1 && operations[0] === 'getOne';
+
 const generateResource = (name: string, apiPath: string, operations: Operation[]): string => {
-  const className = `${toPascalCase(pluralize(name))}Resource`;
+  const resourceName = isSingleton(operations) ? toPascalCase(name) : toPascalCase(pluralize(name));
+  const className = `${resourceName}Resource`;
   const typeName = `Types.${toPascalCase(name)}`;
   const pathParams = extractPathParams(apiPath);
-  const basePath = getBasePath(apiPath);
+  // For singleton resources, use the full path; otherwise strip the /{id} segment
+  const basePath = isSingleton(operations) ? apiPath : getBasePath(apiPath);
 
   if (pathParams.length > 1) {
     return generateNestedResource(className, typeName, basePath, operations);

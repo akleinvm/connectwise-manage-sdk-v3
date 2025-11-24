@@ -355,16 +355,16 @@ export class SystemNamespace {
   }
 
 
-  private _systemInfos?: Resources.SystemInfosResource;
+  private _systemInfo?: Resources.SystemInfoResource;
 
   /**
-   * Access systemInfos operations
+   * Access systemInfo operations
    */
-  get systemInfos(): Resources.SystemInfosResource {
-    if (!this._systemInfos) {
-      this._systemInfos = new Resources.SystemInfosResource(this.http);
+  get systemInfo(): Resources.SystemInfoResource {
+    if (!this._systemInfo) {
+      this._systemInfo = new Resources.SystemInfoResource(this.http);
     }
-    return this._systemInfos;
+    return this._systemInfo;
   }
 
 }

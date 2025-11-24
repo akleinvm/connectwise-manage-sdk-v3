@@ -77,6 +77,19 @@ describe('System Namespace', () => {
       expect(typeof result).toBe('number')
     })
   })
+
+  describe('systemInfo', () => {
+    it('get() returns object with version', async () => {
+      const result = await client.system.systemInfo.get()
+      expect(result).toBeDefined()
+      expect(typeof result.version).toBe('string')
+    })
+
+    it('get() returns object with isCloud', async () => {
+      const result = await client.system.systemInfo.get()
+      expect(typeof result.isCloud).toBe('boolean')
+    })
+  })
 })
 
 describe('Project Namespace', () => {

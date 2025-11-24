@@ -12,8 +12,8 @@ import type { QueryParams, PatchOperation } from './query/types.js';
  */
 export interface ClientConfig {
   /**
-   * The base URL of your ConnectWise instance API
-   * @example 'https://your-instance.com/v4_6_release/apis/3.0'
+   * The base URL of your ConnectWise instance
+   * @example 'https://your-instance.com' or 'your-instance.com'
    */
   baseUrl: string;
 
@@ -54,7 +54,22 @@ export class HttpClient {
   private readonly corsProxyUrl?: string;
 
   constructor(config: ClientConfig) {
-    this.baseUrl = config.baseUrl.replace(/\/$/, '');
+    let baseUrl = config.baseUrl.trim();
+
+    // Ensure URL has protocol
+    if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+      baseUrl = 'https://' + baseUrl;
+    }
+
+    // Remove trailing slash
+    baseUrl = baseUrl.replace(/\/$/, '');
+
+    // Append API path if not present
+    if (!baseUrl.includes('/v4_6_release/apis/3.0')) {
+      baseUrl = `${baseUrl}/v4_6_release/apis/3.0`;
+    }
+
+    this.baseUrl = baseUrl;
     this.authHeader = 'Basic ' + btoa(`${config.auth.username}:${config.auth.password}`);
     this.clientId = config.clientId;
     this.corsProxyUrl = config.corsProxyUrl;

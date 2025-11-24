@@ -149,7 +149,7 @@ Some endpoints return a single object without an ID parameter:
 
 ```typescript
 // Get system info (no ID needed)
-const info = await client.system.info.get();
+const info = await client.system.systemInfo.get();
 console.log(info.version);    // "v2025.1.10431"
 console.log(info.isCloud);    // false
 console.log(info.cloudRegion); // "NA"

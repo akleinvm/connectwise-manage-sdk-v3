@@ -1,5 +1,8 @@
-import type { NamespaceGroup } from '../config.js';
+import type { NamespaceGroup, Operation } from '../config.js';
 import { toPascalCase, toCamelCase, pluralize, extractPathParams } from '../utils.js';
+
+const isSingleton = (operations: Operation[]): boolean =>
+  operations.length === 1 && operations[0] === 'getOne';
 
 export const generateNamespaces = (groups: NamespaceGroup[]): string => {
   const header = `// Auto-generated namespace modules\n// Do not edit manually\n\n`;
@@ -33,9 +36,10 @@ ${members}}
 `;
 };
 
-const generateResourceMember = (item: { name: string; apiPath: string }): string => {
+const generateResourceMember = (item: { name: string; apiPath: string; operations: Operation[] }): string => {
   const pathParams = extractPathParams(item.apiPath);
-  const resourceName = pluralize(item.name);
+  const singleton = isSingleton(item.operations);
+  const resourceName = singleton ? item.name : pluralize(item.name);
   const resourceClass = `Resources.${toPascalCase(resourceName)}Resource`;
   const propName = toCamelCase(resourceName);
 

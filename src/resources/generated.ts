@@ -4464,11 +4464,11 @@ export class PurchaseOrderLineItemsResource {
 
 
 /**
- * Resource for managing systeminfos
+ * Resource for managing systeminfo
  */
-export class SystemInfosResource {
+export class SystemInfoResource {
   private readonly http: HttpClient;
-  private readonly basePath = '/system';
+  private readonly basePath = '/system/info';
 
   constructor(http: HttpClient) {
     this.http = http;
