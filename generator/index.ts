@@ -7,6 +7,7 @@ import { generateTypes } from './generators/types.js';
 import { generateResources } from './generators/resources.js';
 import { generateNamespaces } from './generators/namespaces.js';
 import { generateClient } from './generators/client.js';
+import { validateTypes, printValidationResults } from './validators/types.js';
 
 // --- Data Loading ---
 
@@ -18,16 +19,26 @@ const loadObjects = (): ObjectsMap => {
 const loadSamples = (objects: ObjectsMap): SampleData[] => {
   console.log('Loading samples...');
 
-  return Object.entries(objects).map(([name, apiPath]) => {
+  return Object.entries(objects).map(([name, entityConfig]) => {
     const samplePath = path.resolve(config.samplesPath, `${name}.json`);
 
     try {
       const content = fs.readFileSync(samplePath, 'utf-8');
       const corrected = content.replace(/-?\d*\.\d+/g, '9.99');
-      return { name, apiPath, sample: JSON.parse(corrected) };
+      return {
+        name,
+        apiPath: entityConfig.path,
+        operations: entityConfig.operations,
+        sample: JSON.parse(corrected)
+      };
     } catch {
       console.warn(`  Warning: Sample not found for ${name}`);
-      return { name, apiPath, sample: null };
+      return {
+        name,
+        apiPath: entityConfig.path,
+        operations: entityConfig.operations,
+        sample: null
+      };
     }
   });
 };
@@ -108,6 +119,10 @@ const generate = (): void => {
   const namespaces = generateNamespaces(namespaceGroups);
   const client = generateClient(namespaceGroups);
   const index = generateIndex();
+
+  // Validate
+  const warnings = validateTypes(samples);
+  printValidationResults(warnings);
 
   // Write
   writeOutput({ types, resources, namespaces, client, index });

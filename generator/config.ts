@@ -8,13 +8,21 @@ export const config = {
   outputPath: path.resolve(GENERATOR_PATH, '..', 'src'),
 } as const;
 
+export type Operation = 'list' | 'get' | 'create' | 'update' | 'delete' | 'count';
+
+export interface EntityConfig {
+  path: string;
+  operations: Operation[];
+}
+
 export interface ObjectsMap {
-  [key: string]: string;
+  [key: string]: EntityConfig;
 }
 
 export interface SampleData {
   name: string;
   apiPath: string;
+  operations: Operation[];
   sample: unknown;
 }
 

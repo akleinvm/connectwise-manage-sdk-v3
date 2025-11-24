@@ -18,7 +18,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "generate": "npx tsx generator/index.ts"
+    "generate": "npx tsx generator/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "connectwise",
@@ -31,8 +33,10 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "dotenv": "^17.2.3",
     "tsup": "^8.5.1",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.13"
   }
 }

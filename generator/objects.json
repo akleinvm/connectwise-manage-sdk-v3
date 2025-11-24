@@ -1,45 +1,174 @@
 {
-    "agreement": "/finance/agreements/{agreementId}",
-    "addition": "/finance/agreements/{agreementId}/additions/{additionId}",
-    "catalogItem": "/procurement/catalog/{catalogId}",
-    "product": "/procurement/products/{productId}",
-    "board": "/service/boards/{boardId}",
-    "boardStatus": "/service/boards/{boardId}/statuses/{statusId}",
-    "boardType": "/service/boards/{boardId}/types/{typeId}",
-    "boardSubtype": "/service/boards/{boardId}/subtypes/{subtypeId}",
-    "company": "/company/companies/{companyId}",
-    "companyGroup": "/company/companies/{companyId}/groups/{groupId}",
-    "companySite": "/company/companies/{companyId}/sites/{siteId}",
-    "companyStatus": "/company/companies/statuses/{statusId}",
-    "companyType": "/company/companies/types/{typeId}",
-    "configuration": "/company/configurations/{configurationId}",
-    "contact": "/company/contacts/{contactId}",
-    "contactGroup": "/company/contacts/{contactId}/groups/{groupId}",
-    "contactType": "/company/contacts/types/{typeId}",
-    "department": "/system/departments/{departmentId}",
-    "group": "/marketing/groups/{groupId}",
-    "location": "/system/locations/{locationId}",
-    "member": "/system/members/{memberId}",
-    "project": "/project/projects/{projectId}",
-    "projectTeamMember": "/project/projects/{projectId}/teamMembers/{teamMemberId}",
-    "projectPhase": "/project/projects/{projectId}/phases/{phaseId}",
-    "projectTicket": "/project/tickets/{ticketId}",
-    "projectTicketNote": "/project/tickets/{ticketId}/notes/{noteId}",
-    "schedule": "/schedule/entries/{scheduleId}",
-    "ticket": "/service/tickets/{ticketId}",
-    "ticketNote": "/service/tickets/{ticketId}/notes/{noteId}",
-    "ticketTask": "/project/tickets/{ticketId}/tasks/{taskId}",
-    "timesheet": "/time/sheets/{timesheetId}",
-    "timeEntry": "/time/entries/{timeEntryId}",
-    "expenseEntry": "/expense/entries/{expenseId}",
-    "expenseType": "/expense/types/{typeId}",
-    "classification": "/expense/classifications/{classificationId}",
-    "paymentType": "/expense/paymentTypes/{paymentTypeId}",
-    "workRole": "/time/workRoles/{workRoleId}",
-    "workType": "/time/workTypes/{workTypeId}",
-    "priority": "/service/priorities/{priorityId}",
-    "document": "/system/documents/{documentId}",
-    "salesOrder": "/sales/orders/{orderId}",
-    "purchaseOrder": "/procurement/purchaseOrders/{purchaseOrderId}",
-    "purchaseOrderLineItem": "/procurement/purchaseOrders/{purchaseOrderId}/lineItems/{lineItemId}"
+  "agreement": {
+    "path": "/finance/agreements/{agreementId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "addition": {
+    "path": "/finance/agreements/{agreementId}/additions/{additionId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "catalogItem": {
+    "path": "/procurement/catalog/{catalogId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "product": {
+    "path": "/procurement/products/{productId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "board": {
+    "path": "/service/boards/{boardId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "boardStatus": {
+    "path": "/service/boards/{boardId}/statuses/{statusId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "boardType": {
+    "path": "/service/boards/{boardId}/types/{typeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "boardSubtype": {
+    "path": "/service/boards/{boardId}/subtypes/{subtypeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "company": {
+    "path": "/company/companies/{companyId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "companyGroup": {
+    "path": "/company/companies/{companyId}/groups/{groupId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "companySite": {
+    "path": "/company/companies/{companyId}/sites/{siteId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "companyStatus": {
+    "path": "/company/companies/statuses/{statusId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "companyType": {
+    "path": "/company/companies/types/{typeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "configuration": {
+    "path": "/company/configurations/{configurationId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "contact": {
+    "path": "/company/contacts/{contactId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "contactGroup": {
+    "path": "/company/contacts/{contactId}/groups/{groupId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "contactType": {
+    "path": "/company/contacts/types/{typeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "department": {
+    "path": "/system/departments/{departmentId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "group": {
+    "path": "/marketing/groups/{groupId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "location": {
+    "path": "/system/locations/{locationId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "member": {
+    "path": "/system/members/{memberId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "project": {
+    "path": "/project/projects/{projectId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "projectTeamMember": {
+    "path": "/project/projects/{projectId}/teamMembers/{teamMemberId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "projectPhase": {
+    "path": "/project/projects/{projectId}/phases/{phaseId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "projectTicket": {
+    "path": "/project/tickets/{ticketId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "projectTicketNote": {
+    "path": "/project/tickets/{ticketId}/notes/{noteId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "schedule": {
+    "path": "/schedule/entries/{scheduleId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "ticket": {
+    "path": "/service/tickets/{ticketId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "ticketNote": {
+    "path": "/service/tickets/{ticketId}/notes/{noteId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "ticketTask": {
+    "path": "/project/tickets/{ticketId}/tasks/{taskId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "timesheet": {
+    "path": "/time/sheets/{timesheetId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "timeEntry": {
+    "path": "/time/entries/{timeEntryId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "expenseEntry": {
+    "path": "/expense/entries/{expenseId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "expenseType": {
+    "path": "/expense/types/{typeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "classification": {
+    "path": "/expense/classifications/{classificationId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "paymentType": {
+    "path": "/expense/paymentTypes/{paymentTypeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "workRole": {
+    "path": "/time/workRoles/{workRoleId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "workType": {
+    "path": "/time/workTypes/{workTypeId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "priority": {
+    "path": "/service/priorities/{priorityId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "document": {
+    "path": "/system/documents/{documentId}",
+    "operations": ["list", "get", "create", "delete"]
+  },
+  "salesOrder": {
+    "path": "/sales/orders/{orderId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "purchaseOrder": {
+    "path": "/procurement/purchaseOrders/{purchaseOrderId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  },
+  "purchaseOrderLineItem": {
+    "path": "/procurement/purchaseOrders/{purchaseOrderId}/lineItems/{lineItemId}",
+    "operations": ["list", "get", "create", "update", "delete", "count"]
+  }
 }

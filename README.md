@@ -233,9 +233,19 @@ The SDK is generated from sample API responses. All generation inputs are in the
 
 ```
 generator/
-├── index.ts        # Generator script
-├── objects.json    # API endpoint mappings
-└── samples/        # Sample JSON responses from ConnectWise API
+├── index.ts           # Pipeline orchestrator
+├── config.ts          # Paths and type definitions
+├── utils.ts           # String utilities
+├── schema.ts          # Type inference from samples
+├── objects.json       # API endpoint mappings
+├── generators/
+│   ├── types.ts       # Generate TypeScript interfaces
+│   ├── resources.ts   # Generate resource classes
+│   ├── namespaces.ts  # Generate namespace modules
+│   └── client.ts      # Generate main client
+├── validators/
+│   └── types.ts       # Validate generated types
+└── samples/           # Sample JSON responses (gitignored)
     ├── ticket.json
     ├── company.json
     └── ...
@@ -294,6 +304,27 @@ The generator will:
 - Infer TypeScript types from the sample data
 - Create resource classes with CRUD operations
 - Group resources into namespaces based on the API path
+- Validate generated types against samples
+
+### Validation
+
+After generating code, the generator automatically validates that all generated types match the sample data. Validation warnings are displayed but don't prevent output:
+
+```
+Validating generated types...
+  ⚠ Contact.types: expected 'array', got 'unknown[]'
+  ⚠ Member.memberPersonas: expected 'array', got 'unknown[]'
+Validation complete: 2 warning(s)
+Writing output files...
+```
+
+Validation checks:
+- **Property existence** - All sample properties exist in generated types
+- **Type matching** - Inferred types match actual sample values
+- **Nested objects** - Recursively validates nested structures
+- **Arrays** - Validates array item types
+
+> **Note:** Empty arrays in samples are typed as `unknown[]` since there's no data to infer the item type.
 
 ## License
 
