@@ -19,8 +19,17 @@ export const generateClient = (groups: NamespaceGroup[]): string => {
  *
  * @example
  * \`\`\`typescript
+ * // Option 1: Configure at construction
  * const client = new ConnectWiseClient({
  *   baseUrl: 'https://your-instance.com/v4_6_release/apis/3.0',
+ *   auth: { username: 'company+publicKey', password: 'privateKey' },
+ *   clientId: 'your-client-id'
+ * });
+ *
+ * // Option 2: Deferred configuration
+ * const client = new ConnectWiseClient();
+ * client.configure({
+ *   baseUrl: 'https://your-instance.com',
  *   auth: { username: 'company+publicKey', password: 'privateKey' },
  *   clientId: 'your-client-id'
  * });
@@ -36,8 +45,23 @@ export class ConnectWiseClient {
   private readonly http: HttpClient;
 
 ${privateFields}
-  constructor(config: ClientConfig) {
+  constructor(config?: ClientConfig) {
     this.http = new HttpClient(config);
+  }
+
+  /**
+   * Configure the client with connection details
+   * Required before making any API requests if not provided in constructor
+   */
+  configure(config: ClientConfig): void {
+    this.http.configure(config);
+  }
+
+  /**
+   * Check if the client is configured
+   */
+  isConfigured(): boolean {
+    return this.http.isConfigured();
   }
 
 ${getters}}
